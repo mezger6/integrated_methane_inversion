@@ -554,6 +554,10 @@ cd \${RUNDIR}" jacobian_runs/run_jacobian_simulations.sh
 
         set +e
 
+        # Per-task sizing for the jacobian array (falls back to RequestedX).
+        JacobianMemory="${JacobianMemory:-$RequestedMemory}"
+        JacobianCPUs="${JacobianCPUs:-$RequestedCPUs}"
+
         printf "\n=== SUBMITTING JACOBIAN SIMULATIONS ===\n"
         # Submit job to job scheduler
         source submit_jacobian_simulations_array.sh

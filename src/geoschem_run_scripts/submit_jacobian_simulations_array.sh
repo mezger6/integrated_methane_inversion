@@ -5,8 +5,8 @@ echo "running {END} jacobian simulations" >> {InversionPath}/imi_output.log
 rm -f .error_status_file.txt
 
 if [[ $SchedulerType = "slurm" || $SchedulerType = "tmux" ]]; then
-    sbatch --array={START}-{END}{JOBS} --mem $RequestedMemory \
-        -c $RequestedCPUs \
+    sbatch --array={START}-{END}{JOBS} --mem $JacobianMemory \
+        -c $JacobianCPUs \
         -N 1 \
         -t $RequestedTime \
         -p $SchedulerPartition \
@@ -15,7 +15,7 @@ if [[ $SchedulerType = "slurm" || $SchedulerType = "tmux" ]]; then
         -W run_jacobian_simulations.sh
 elif [[ $SchedulerType = "PBS" ]]; then
     qsub -J {START}-{END}{JOBS} \
-        -lselect=1:ncpus=$RequestedCPUs:mem="$RequestedMemory":model=ivy \
+        -lselect=1:ncpus=$JacobianCPUs:mem="$JacobianMemory":model=ivy \
         -l walltime=$RequestedTime \
         -l site=needed=$SitesNeeded \
         -o imi_output.tmp \
