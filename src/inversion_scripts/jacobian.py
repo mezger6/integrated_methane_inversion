@@ -49,6 +49,7 @@ def apply_operator(operator, params, config):
             params["period_i"],
             config,
             params["use_water_obs"],
+            params["filter_inland"],
         )
     elif operator == "satellite":
         return apply_satellite_operator(
@@ -64,6 +65,7 @@ def apply_operator(operator, params, config):
             params["period_i"],
             config,
             params["use_water_obs"],
+            params["filter_inland"],
         )
     else:
         raise ValueError("Error: invalid operator selected.")
@@ -88,6 +90,7 @@ if __name__ == "__main__":
     period_i = int(sys.argv[15])
     build_jacobian = sys.argv[16]
     viz_prior = sys.argv[17]
+    filter_inland = (sys.argv[18].lower() == "true") if len(sys.argv) > 18 else False
 
     # Reformat start and end days for datetime in configuration
     start = f"{startday[0:4]}-{startday[4:6]}-{startday[6:8]} 00:00:00"
@@ -168,6 +171,7 @@ if __name__ == "__main__":
                     "build_jacobian": build_jacobian,
                     "period_i": period_i,
                     "use_water_obs": use_water_obs,
+                    "filter_inland": filter_inland,
                 },
                 config,
             )
@@ -188,6 +192,7 @@ if __name__ == "__main__":
                     "build_jacobian": False,
                     "period_i": period_i,
                     "use_water_obs": use_water_obs,
+                    "filter_inland": filter_inland,
                 },
                 config,
             )
