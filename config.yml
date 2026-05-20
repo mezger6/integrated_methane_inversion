@@ -26,6 +26,7 @@ CH4:
   SatelliteProduct: "BlendedTROPOMI"
   ## Use observations over water? Set to false to filter out water observations
   UseWaterObs: false
+  FilterInland: false
   OptimizeOH: false
   # optimize soil option when using normal errors,
   # do not use it when using Lognormal errors as negative flux is not allowed with lognormal errors,
@@ -40,6 +41,7 @@ CO2:
   ## Supported products are OCO2
   SatelliteProduct: "OCO2"
   UseWaterObs: false
+  FilterInland: false
   # Save out GEOS-Chem diagnostics for additional observation operators
   AdditionalDiagnostics: ["ObsPack"]  ## TCCON, PLANEFLIGHT
 
