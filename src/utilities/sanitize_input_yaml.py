@@ -142,6 +142,8 @@ optional_rules: Dict[str, Rule] = {
     "PointSourceDatasets": ANY,  # list[str]
     "InversionCPUs": int,
     "InversionMemory": ANY,
+    "JacobianCPUs": int,
+    "JacobianMemory": ANY,
     "UseWaterObs": bool,  # already required above, here harmless if present
     "OptimizeBCs": bool,
     "OptimizeOH": bool,
