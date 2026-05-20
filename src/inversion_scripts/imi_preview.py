@@ -42,7 +42,7 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 def get_satellite_data(
     file_path, satellite_str, species, xlim, ylim, startdate_np64, enddate_np64,
-    use_water_obs
+    use_water_obs, filter_inland=False
 ):
     """
     Returns a dict with the lat, lon, xspecies, and albedo_swir observations
@@ -74,7 +74,7 @@ def get_satellite_data(
     # Load the satellite data
     satellite, sat_ind = read_and_filter_satellite(
         file_path, satellite_str, startdate_np64, enddate_np64, xlim, ylim,
-        use_water_obs)
+        use_water_obs, filter_inland)
 
     # Loop over observations and archive
     num_obs = len(sat_ind[0])
@@ -668,6 +668,9 @@ def estimate_averaging_kernel(
     # Whether to use observations over water?
     use_water_obs = config["UseWaterObs"] if "UseWaterObs" in config.keys() else False
 
+    # Whether to fully filter inland water pixels (blended product only)?
+    filter_inland = config["FilterInland"] if "FilterInland" in config.keys() else False
+
     # Define mask for ROI, to be used below
     mask = state_vector_labels <= last_ROI_element
 
@@ -774,7 +777,8 @@ def estimate_averaging_kernel(
             ylim, 
             startdate_np64, 
             enddate_np64,
-            use_water_obs
+            use_water_obs,
+            filter_inland,
         )
         for file_path in satellite_paths
     )
