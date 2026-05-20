@@ -40,7 +40,8 @@ def apply_average_satellite_operator(
     build_jacobian,
     period_i,
     config,
-    use_water_obs=False
+    use_water_obs=False,
+    filter_inland=False,
 ):
     """
     Apply the averaging satellite operator to map GEOS-Chem data to satellite observation space.
@@ -74,7 +75,7 @@ def apply_average_satellite_operator(
     # Read satellite data
     satellite, sat_ind = read_and_filter_satellite(
         filename, satellite_product, gc_startdate, gc_enddate,
-        xlim, ylim, use_water_obs)
+        xlim, ylim, use_water_obs, filter_inland)
 
     # Number of satellite observations
     n_obs = len(sat_ind[0])
@@ -289,6 +290,7 @@ def apply_satellite_operator(
     period_i,
     config,
     use_water_obs=False,
+    filter_inland=False,
 ):
     """
     Apply the satellite operator to map GEOS-Chem species data to satellite observation space.
@@ -321,7 +323,7 @@ def apply_satellite_operator(
     # Read satellite data
     satellite, sat_ind = read_and_filter_satellite(
         filename, satellite_product, gc_startdate, gc_enddate,
-        xlim, ylim, use_water_obs)
+        xlim, ylim, use_water_obs, filter_inland)
 
     # Number of satellite observations
     n_obs = len(sat_ind[0])

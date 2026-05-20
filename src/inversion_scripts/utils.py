@@ -696,7 +696,7 @@ def filter_tropomi(tropomi_data, xlim, ylim, startdate, enddate, use_water_obs=F
         return np.where(valid_idx & (tropomi_data["surface_classification"] != 1))
 
 
-def filter_blended(blended_data, xlim, ylim, startdate, enddate, use_water_obs=False):
+def filter_blended(blended_data, xlim, ylim, startdate, enddate, use_water_obs=False, fully_filter_inland_water=False):
     """
     Description:
         Filter out any data that does not meet the following
@@ -730,10 +730,13 @@ def filter_blended(blended_data, xlim, ylim, startdate, enddate, use_water_obs=F
         & (blended_data["latitude"] > -60)
     )
 
-    if use_water_obs:
-        return np.where(valid_idx)
-    else:
-        return np.where(valid_idx & (blended_data["surface_classification"] != 1))
+    if not use_water_obs:
+        valid_idx = valid_idx & (blended_data["surface_classification"] != 1)
+
+    if fully_filter_inland_water:
+        valid_idx = valid_idx & ~(blended_data["surface_classification"] == 2)
+
+    return np.where(valid_idx)
 
 
 def calculate_area_in_km(coordinate_list):
@@ -980,7 +983,8 @@ def read_blended(filename):
 
 
 def read_and_filter_satellite(
-    filename, satellite_str, gc_startdate, gc_enddate, xlim, ylim, use_water_obs
+    filename, satellite_str, gc_startdate, gc_enddate, xlim, ylim, use_water_obs,
+    filter_inland=False,
 ):
 
     # Read TROPOMI data
@@ -1001,7 +1005,8 @@ def read_and_filter_satellite(
     if satellite_str == "BlendedTROPOMI":
         # Only going to consider blended data within lat/lon/time bounds and wihtout problematic coastal pixels
         sat_ind = filter_blended(
-            satellite, xlim, ylim, gc_startdate, gc_enddate, use_water_obs
+            satellite, xlim, ylim, gc_startdate, gc_enddate, use_water_obs,
+            filter_inland,
         )
     elif satellite_str == "TROPOMI":
         # Only going to consider TROPOMI data within lat/lon/time bounds and with QA > 0.5
